@@ -1,0 +1,120 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Address: Model representing a physical address in the CRM system.
+Customer: Model representing a customer in the CRM system.
+CustomerCustomerType: Junction table for many-to-many relationship between customers and customer types.
+CustomerType: Model representing a customer type or category.
+Employee: Model representing an employee in the CRM system who takes or manages orders.
+EmployeeOrder: Junction table for many-to-many relationship between employees and orders.
+Order: Model representing an order made by a customer.
+OrderItem: Model representing an item in an order, linking orders to products.
+Product: Model representing a product sold by the CRM system.
+ProductSupplier: Link table mapping products to their suppliers.
+Supplier: Model representing a supplier of products.
+Review: Model representing a review made by a customer for a product.
+'''
+}
+
+Table Address {
+    id INTEGER [primary key]
+    street VARCHAR 
+    city VARCHAR 
+    state VARCHAR 
+    zip_code VARCHAR 
+    }
+
+Table Customer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    email VARCHAR 
+    phone VARCHAR 
+    address_id INTEGER 
+    }
+
+Table CustomerCustomerType {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    customer_type_id INTEGER 
+    }
+
+Table CustomerType {
+    id INTEGER [primary key]
+    description VARCHAR 
+    }
+
+Table Employee {
+    id INTEGER [primary key]
+    first_name VARCHAR 
+    last_name VARCHAR 
+    email VARCHAR 
+    phone VARCHAR 
+    }
+
+Table EmployeeOrder {
+    id INTEGER [primary key]
+    employee_id INTEGER 
+    order_id INTEGER 
+    }
+
+Table Order {
+    id INTEGER [primary key]
+    order_date DATETIME 
+    shipped_date DATETIME 
+    customer_id INTEGER 
+    }
+
+Table OrderItem {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    product_id INTEGER 
+    quantity INTEGER 
+    unit_price FLOAT 
+    }
+
+Table Product {
+    id INTEGER [primary key]
+    name VARCHAR 
+    description VARCHAR 
+    price FLOAT 
+    }
+
+Table ProductSupplier {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    supplier_id INTEGER 
+    }
+
+Table Supplier {
+    id INTEGER [primary key]
+    name VARCHAR 
+    email VARCHAR 
+    phone VARCHAR 
+    }
+
+Table Review {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    product_id INTEGER 
+    review_text VARCHAR 
+    rating INTEGER 
+    }
+
+
+
+// Relationships
+    Ref: Customer.(address_id) < Address.(id)
+    Ref: CustomerCustomerType.(customer_id) < Customer.(id)
+    Ref: CustomerCustomerType.(customer_type_id) < CustomerType.(id)
+    Ref: EmployeeOrder.(employee_id) < Employee.(id)
+    Ref: EmployeeOrder.(order_id) < Order.(id)
+    Ref: Order.(customer_id) < Customer.(id)
+    Ref: OrderItem.(order_id) < Order.(id)
+    Ref: OrderItem.(product_id) < Product.(id)
+    Ref: ProductSupplier.(product_id) < Product.(id)
+    Ref: ProductSupplier.(supplier_id) < Supplier.(id)
+    Ref: Review.(customer_id) < Customer.(id)
+    Ref: Review.(product_id) < Product.(id)

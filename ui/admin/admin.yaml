@@ -1,0 +1,338 @@
+about:
+  date: December 31, 2024 10:39:28
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 12
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Address:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: street
+    - name: city
+    - name: state
+    - name: zip_code
+    description: Model representing a physical address in the CRM system.
+    info_list: Model representing a physical address in the CRM system.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - address_id
+      name: CustomerList
+      resource: Customer
+    type: Address
+    user_key: id
+  Customer:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: address_id
+    - name: email
+    - name: phone
+    - name: id
+    description: Model representing a customer in the CRM system.
+    info_list: Model representing a customer in the CRM system.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: CustomerCustomerTypeList
+      resource: CustomerCustomerType
+    - direction: tomany
+      fks:
+      - customer_id
+      name: OrderList
+      resource: Order
+    - direction: tomany
+      fks:
+      - customer_id
+      name: ReviewList
+      resource: Review
+    - direction: toone
+      fks:
+      - address_id
+      name: address
+      resource: Address
+    type: Customer
+    user_key: name
+  CustomerCustomerType:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: customer_type_id
+    description: Junction table for many-to-many relationship between customers and
+      customer types.
+    info_list: Junction table for many-to-many relationship between customers and
+      customer types.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - customer_type_id
+      name: customer_type
+      resource: CustomerType
+    type: CustomerCustomerType
+    user_key: id
+  CustomerType:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: id
+    description: Model representing a customer type or category.
+    info_list: Model representing a customer type or category.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_type_id
+      name: CustomerCustomerTypeList
+      resource: CustomerCustomerType
+    type: CustomerType
+    user_key: description
+  Employee:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      search: true
+      sort: true
+    - name: last_name
+    - name: email
+    - name: phone
+    - name: id
+    description: Model representing an employee in the CRM system who takes or manages
+      orders.
+    info_list: Model representing an employee in the CRM system who takes or manages
+      orders.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - employee_id
+      name: EmployeeOrderList
+      resource: EmployeeOrder
+    type: Employee
+    user_key: first_name
+  EmployeeOrder:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: employee_id
+    - name: order_id
+    description: Junction table for many-to-many relationship between employees and
+      orders.
+    info_list: Junction table for many-to-many relationship between employees and
+      orders.
+    tab_groups:
+    - direction: toone
+      fks:
+      - employee_id
+      name: employee
+      resource: Employee
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    type: EmployeeOrder
+    user_key: id
+  Order:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: order_date
+      type: DATETIME
+    - name: shipped_date
+      type: DATETIME
+    description: Model representing an order made by a customer.
+    info_list: Model representing an order made by a customer.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: EmployeeOrderList
+      resource: EmployeeOrder
+    - direction: tomany
+      fks:
+      - order_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Order
+    user_key: id
+  OrderItem:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: order_id
+    - name: product_id
+    - name: quantity
+    - name: unit_price
+    description: Model representing an item in an order, linking orders to products.
+    info_list: Model representing an item in an order, linking orders to products.
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: OrderItem
+    user_key: id
+  Product:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: description
+    - name: price
+    - name: id
+    description: Model representing a product sold by the CRM system.
+    info_list: Model representing a product sold by the CRM system.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - product_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: tomany
+      fks:
+      - product_id
+      name: ProductSupplierList
+      resource: ProductSupplier
+    - direction: tomany
+      fks:
+      - product_id
+      name: ReviewList
+      resource: Review
+    type: Product
+    user_key: name
+  ProductSupplier:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+    - name: supplier_id
+    description: Link table mapping products to their suppliers.
+    info_list: Link table mapping products to their suppliers.
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    - direction: toone
+      fks:
+      - supplier_id
+      name: supplier
+      resource: Supplier
+    type: ProductSupplier
+    user_key: id
+  Review:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: product_id
+    - name: review_text
+    - name: rating
+    description: Model representing a review made by a customer for a product.
+    info_list: Model representing a review made by a customer for a product.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: Review
+    user_key: id
+  Supplier:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: email
+    - name: phone
+    - name: id
+    description: Model representing a supplier of products.
+    info_list: Model representing a supplier of products.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - supplier_id
+      name: ProductSupplierList
+      resource: ProductSupplier
+    type: Supplier
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

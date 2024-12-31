@@ -1,0 +1,138 @@
+{
+    "models": [
+        {
+            "classname": "Customer",
+            "code": "class Customer(Base):\n    __tablename__ = 'customer'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    email = Column(String)\n    phone = Column(String)\n    address_id = Column(Integer, ForeignKey('address.id'))",
+            "description": "Model representing a customer in the CRM system.",
+            "name": "customer"
+        },
+        {
+            "classname": "Address",
+            "code": "class Address(Base):\n    __tablename__ = 'address'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    street = Column(String)\n    city = Column(String)\n    state = Column(String)\n    zip_code = Column(String)",
+            "description": "Model representing a physical address in the CRM system.",
+            "name": "address"
+        },
+        {
+            "classname": "Order",
+            "code": "class Order(Base):\n    __tablename__ = 'order'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    order_date = Column(DateTime)\n    shipped_date = Column(DateTime)\n    customer_id = Column(Integer, ForeignKey('customer.id'))",
+            "description": "Model representing an order made by a customer.",
+            "name": "order"
+        },
+        {
+            "classname": "Product",
+            "code": "class Product(Base):\n    __tablename__ = 'product'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    description = Column(String)\n    price = Column(Float)",
+            "description": "Model representing a product sold by the CRM system.",
+            "name": "product"
+        },
+        {
+            "classname": "OrderItem",
+            "code": "class OrderItem(Base):\n    __tablename__ = 'order_item'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    order_id = Column(Integer, ForeignKey('order.id'))\n    product_id = Column(Integer, ForeignKey('product.id'))\n    quantity = Column(Integer)\n    unit_price = Column(Float)",
+            "description": "Model representing an item in an order, linking orders to products.",
+            "name": "order_item"
+        },
+        {
+            "classname": "Employee",
+            "code": "class Employee(Base):\n    __tablename__ = 'employee'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    first_name = Column(String)\n    last_name = Column(String)\n    email = Column(String)\n    phone = Column(String)",
+            "description": "Model representing an employee in the CRM system who takes or manages orders.",
+            "name": "employee"
+        },
+        {
+            "classname": "CustomerType",
+            "code": "class CustomerType(Base):\n    __tablename__ = 'customer_type'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    description = Column(String)",
+            "description": "Model representing a customer type or category.",
+            "name": "customer_type"
+        },
+        {
+            "classname": "CustomerCustomerType",
+            "code": "class CustomerCustomerType(Base):\n    __tablename__ = 'customer_customer_type'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    customer_type_id = Column(Integer, ForeignKey('customer_type.id'))",
+            "description": "Junction table for many-to-many relationship between customers and customer types.",
+            "name": "customer_customer_type"
+        },
+        {
+            "classname": "EmployeeOrder",
+            "code": "class EmployeeOrder(Base):\n    __tablename__ = 'employee_order'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    employee_id = Column(Integer, ForeignKey('employee.id'))\n    order_id = Column(Integer, ForeignKey('order.id'))",
+            "description": "Junction table for many-to-many relationship between employees and orders.",
+            "name": "employee_order"
+        },
+        {
+            "classname": "Supplier",
+            "code": "class Supplier(Base):\n    __tablename__ = 'supplier'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    email = Column(String)\n    phone = Column(String)",
+            "description": "Model representing a supplier of products.",
+            "name": "supplier"
+        },
+        {
+            "classname": "ProductSupplier",
+            "code": "class ProductSupplier(Base):\n    __tablename__ = 'product_supplier'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    product_id = Column(Integer, ForeignKey('product.id'))\n    supplier_id = Column(Integer, ForeignKey('supplier.id'))",
+            "description": "Link table mapping products to their suppliers.",
+            "name": "product_supplier"
+        },
+        {
+            "classname": "Review",
+            "code": "class Review(Base):\n    __tablename__ = 'review'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    product_id = Column(Integer, ForeignKey('product.id'))\n    review_text = Column(String)\n    rating = Column(Integer)",
+            "description": "Model representing a review made by a customer for a product.",
+            "name": "review"
+        }
+    ],
+    "rules": [],
+    "test_data": "[\n  {\n    \"customer\": [\n      \"id\": 1, \n      \"name\": \"John Doe\", \n      \"email\": \"john@example.com\", \n      \"phone\": \"1234567890\"\n    ]\n  },\n  {\n    \"customer\": [\n      \"id\": 2, \n      \"name\": \"Jane Smith\", \n      \"email\": \"jane@example.com\", \n      \"phone\": \"0987654321\"\n    ]\n  },\n  {\n    \"order\": [\n      \"id\": 1, \n      \"order_date\": \"date(2023, 1, 15)\"\n    ]\n  },\n  {\n    \"order\": [\n      \"id\": 2, \n      \"order_date\": \"date(2023, 2, 1)\"\n    ]\n  }\n]",
+    "test_data_rows": [
+        {
+            "test_data_row_variable": "customer1",
+            "code": "customer1 = Customer(name=\"John Doe\", email=\"john@example.com\", phone=\"1234567890\", address_id=1)"
+        },
+        {
+            "test_data_row_variable": "customer2",
+            "code": "customer2 = Customer(name=\"Jane Smith\", email=\"jane@example.com\", phone=\"0987654321\", address_id=2)"
+        },
+        {
+            "test_data_row_variable": "order1",
+            "code": "order1 = Order(order_date=date(2023, 1, 15), shipped_date=date(2023, 1, 18), customer_id=1)"
+        },
+        {
+            "test_data_row_variable": "order2",
+            "code": "order2 = Order(order_date=date(2023, 2, 1), shipped_date=date(2023, 2, 4), customer_id=2)"
+        },
+        {
+            "test_data_row_variable": "product1",
+            "code": "product1 = Product(name=\"Widget\", description=\"A useful widget\", price=9.99)"
+        },
+        {
+            "test_data_row_variable": "product2",
+            "code": "product2 = Product(name=\"Gadget\", description=\"An advanced gadget\", price=23.45)"
+        },
+        {
+            "test_data_row_variable": "orderitem1",
+            "code": "orderitem1 = OrderItem(order_id=1, product_id=1, quantity=2, unit_price=9.99)"
+        },
+        {
+            "test_data_row_variable": "orderitem2",
+            "code": "orderitem2 = OrderItem(order_id=2, product_id=2, quantity=1, unit_price=23.45)"
+        },
+        {
+            "test_data_row_variable": "employee1",
+            "code": "employee1 = Employee(first_name=\"Alice\", last_name=\"Brown\", email=\"alice.brown@example.com\", phone=\"2223334444\")"
+        },
+        {
+            "test_data_row_variable": "employee2",
+            "code": "employee2 = Employee(first_name=\"Bob\", last_name=\"Green\", email=\"bob.green@example.com\", phone=\"5556667777\")"
+        },
+        {
+            "test_data_row_variable": "supplier1",
+            "code": "supplier1 = Supplier(name=\"SupplyCo\", email=\"contact@supplyco.com\", phone=\"1112223333\")"
+        },
+        {
+            "test_data_row_variable": "supplier2",
+            "code": "supplier2 = Supplier(name=\"GoodsRUs\", email=\"sales@goodsrus.com\", phone=\"8889990000\")"
+        },
+        {
+            "test_data_row_variable": "review1",
+            "code": "review1 = Review(customer_id=1, product_id=1, review_text=\"Excellent product!\", rating=5)"
+        },
+        {
+            "test_data_row_variable": "review2",
+            "code": "review2 = Review(customer_id=2, product_id=2, review_text=\"Good value\", rating=4)"
+        }
+    ],
+    "test_data_sqlite": "INSERT INTO \"customer\" (\"id\", \"name\", \"email\", \"phone\", \"address_id\") VALUES\n  (1, \"John Doe\", \"john@example.com\", \"1234567890\", 1),\n  (2, \"Jane Smith\", \"jane@example.com\", \"0987654321\", 2);\n\nINSERT INTO \"order\" (\"id\", \"order_date\", \"shipped_date\", \"customer_id\") VALUES\n  (1, \"2023-01-15\", \"2023-01-18\", 1),\n  (2, \"2023-02-01\", \"2023-02-04\", 2);\n\nINSERT INTO \"product\" (\"id\", \"name\", \"description\", \"price\") VALUES\n  (1, \"Widget\", \"A useful widget\", 9.99),\n  (2, \"Gadget\", \"An advanced gadget\", 23.45);\n\nINSERT INTO \"order_item\" (\"id\", \"order_id\", \"product_id\", \"quantity\", \"unit_price\") VALUES\n  (1, 1, 1, 2, 9.99),\n  (2, 2, 2, 1, 23.45);\n\nINSERT INTO \"employee\" (\"id\", \"first_name\", \"last_name\", \"email\", \"phone\") VALUES\n  (1, \"Alice\", \"Brown\", \"alice.brown@example.com\", \"2223334444\"),\n  (2, \"Bob\", \"Green\", \"bob.green@example.com\", \"5556667777\");\n\nINSERT INTO \"supplier\" (\"id\", \"name\", \"email\", \"phone\") VALUES\n  (1, \"SupplyCo\", \"contact@supplyco.com\", \"1112223333\"),\n  (2, \"GoodsRUs\", \"sales@goodsrus.com\", \"8889990000\");\n\nINSERT INTO \"review\" (\"id\", \"customer_id\", \"product_id\", \"review_text\", \"rating\") VALUES\n  (1, 1, 1, \"Excellent product!\", 5),\n  (2, 2, 2, \"Good value\", 4);",
+    "name": "CRM_System"
+}
